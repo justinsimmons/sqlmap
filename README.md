@@ -1,12 +1,12 @@
 # sqlmap
 
-This package provides the functionality to convert a datatype in go to its sql null data type. 
+Convert a native go datatype to and from its sql null datatype equivalent.
 
 ## Why does this exist?
 
 Recently I started using a tool called [sqlc](https://sqlc.dev/) as a pseudo-ORM in one of my projects. Its a great tool but it has a couple of quirks. This package addresses one of those quirks. 
 
-If your database schema contains a null value, the generated code requires you to transform a pointer value to a `sql.NulXYZ`` type.
+If your database schema contains a null value, the generated code requires you to transform a pointer value to a `sql.NulXYZ` type.
 ```golang
     // We have a string pointer but need a sql.NullString type.
     var biz *string
@@ -30,8 +30,11 @@ This package provides helper code to enable you to do the conversion inline.
     // We have a string pointer but need a sql.NullString type.
     var biz *string
 
-    // insertRowInDatabase(context.Context, sql.NullString)
-    err := insertRowInDatabase(ctx, sqlmap.ToNullString(biz))
+    // insertRowInDatabase(context.Context, sql.NullString) (sql.NullString, error)
+    val, _ := insertRowInDatabase(ctx, sqlmap.ToNullString(biz))
+
+	// It also allows you to "unwrap" the resultant `sql.NulXYZ` value to make it actually usable.
+	biz = sqlmap.UnwrapString(val)
 ```
 
 
@@ -100,7 +103,7 @@ func (q *Queries) CreateFoo(ctx context.Context, arg CreateFooParams) (Foo, erro
 }
 ```
 
-Use sqlmap inline with your params to avoid boilerplate code.
+Use sqlmap inline with your params to avoid boilerplate code. Super useful for CRUD operations where you need to map a request to your datastores representation.
 
 ```golang
 func main() {
@@ -116,6 +119,12 @@ func main() {
 		Biz: "This is biz",
 	})
 
-    // ...
+	// Note: foo.Bar is of type sql.NullString, which isn't really useful to us. 
+	// So we make use of the unwrap function to convert it to a more canonical go datatype.
+	biz = sqlmap.UnwrapString(foo.Bar)
 }
 ```
+
+## License
+
+This program is released under the GNU Lesser General Public License v3 or later.
