@@ -121,7 +121,7 @@ func UnwrapUUID(in uuid.NullUUID) *uuid.UUID {
 	var nID *uuid.UUID
 
 	if in.Valid {
-		nID = in.UUID
+		nID = &in.UUID
 	}
 
 	return nID
