@@ -11,6 +11,8 @@ import (
 	"database/sql"
 	"time"
 
+	"github.com/google/uuid"
+
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -112,4 +114,15 @@ func UnwrapBoolean(in sql.NullBool) *bool {
 	}
 
 	return nBool
+}
+
+// UnwrapUUID unwraps the github.com/google/uuid.NullUUID to a uuid.UUID pointer.
+func UnwrapUUID(in uuid.NullUUID) *uuid.UUID {
+	var nID *uuid.UUID
+
+	if in.Valid {
+		nID = in.UUID
+	}
+
+	return nID
 }
