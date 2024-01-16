@@ -13,9 +13,9 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-// ToNullTimeFromTimestamp converts an timestamppb.Timestamp pointer to a sql.NullTime type.
+// NullTimeFromTimestamp converts an timestamppb.Timestamp pointer to a sql.NullTime type.
 // This will save you a conversion when dealing with gRPC requests.
-func ToNullTimeFromTimestamp(t *timestamppb.Timestamp) sql.NullTime {
+func NullTimeFromTimestamp(t *timestamppb.Timestamp) sql.NullTime {
 	nTime := sql.NullTime{}
 
 	if t != nil && t.IsValid() {

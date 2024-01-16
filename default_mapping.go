@@ -14,99 +14,146 @@ import (
 	"time"
 )
 
-// ToNullString converts a string pointer to a sql.NullString type.
-func ToNullString(in *string) sql.NullString {
+// NullString converts the native go string type to a sql.NullString type.
+func NullString[T string | *string](s T) sql.NullString {
 	nString := sql.NullString{}
 
-	if in != nil {
-		nString.String = *in
+	switch v := any(s).(type) {
+	case string:
+		nString.String = v
 		nString.Valid = true
+	case *string:
+		if v != nil {
+			nString.String = *v
+			nString.Valid = true
+		}
 	}
 
 	return nString
 }
 
-// ToNullInt64 converts an int64 pointer to a sql.NullInt64 type.
-func ToNullInt64(in *int64) sql.NullInt64 {
+// NullInt64 converts the native go int64 type to a sql.NullInt64 type.
+func NullInt64[T int64 | *int64](i T) sql.NullInt64 {
 	nInt := sql.NullInt64{}
 
-	if in != nil {
-		nInt.Int64 = *in
+	switch v := any(i).(type) {
+	case int64:
+		nInt.Int64 = v
 		nInt.Valid = true
+	case *int64:
+		if v != nil {
+			nInt.Int64 = *v
+			nInt.Valid = true
+		}
 	}
 
 	return nInt
 }
 
-// ToNullInt32 converts an int32 pointer to a sql.NullInt32 type.
-func ToNullInt32(in *int32) sql.NullInt32 {
+// NullInt32 converts the native go int32 type to a sql.NullInt32 type.
+func NullInt32(i *int32) sql.NullInt32 {
 	nInt := sql.NullInt32{}
 
-	if in != nil {
-		nInt.Int32 = *in
+	switch v := any(i).(type) {
+	case int32:
+		nInt.Int32 = v
 		nInt.Valid = true
+	case *int32:
+		if v != nil {
+			nInt.Int32 = *v
+			nInt.Valid = true
+		}
 	}
 
 	return nInt
 }
 
-// ToNullInt16 converts an int16 pointer to a sql.NullInt16 type.
-// TODO: find a clever way to do this with generics
-func ToNullInt16(in *int16) sql.NullInt16 {
+// NullInt16 converts the native go int16 type to a sql.NullInt16 type.
+func NullInt16[T int16 | *int16](i T) sql.NullInt16 {
 	nInt := sql.NullInt16{}
 
-	if in != nil {
-		nInt.Int16 = *in
+	switch v := any(i).(type) {
+	case int16:
+		nInt.Int16 = v
 		nInt.Valid = true
+	case *int16:
+		if v != nil {
+			nInt.Int16 = *v
+			nInt.Valid = true
+		}
 	}
 
 	return nInt
 }
 
-// ToNullByte converts a byte pointer to a sql.NullByte type.
-func ToNullByte(in *byte) sql.NullByte {
+// ToNullByte converts the native go byte type to a sql.NullByte type.
+func NullByte[T byte | *byte](b T) sql.NullByte {
 	nByte := sql.NullByte{}
 
-	if in != nil {
-		nByte.Byte = *in
+	switch v := any(b).(type) {
+	case byte:
+		nByte.Byte = v
 		nByte.Valid = true
+	case *byte:
+		if v != nil {
+			nByte.Byte = *v
+			nByte.Valid = true
+		}
 	}
 
 	return nByte
 }
 
-// ToNullFloat64 converts a float64 pointer to a sql.NullFloat64 type.
-func ToNullFloat64(in *float64) sql.NullFloat64 {
+// NullFloat64 converts the native go float64 type to a sql.NullFloat64 type.
+func NullFloat64[T float64 | *float64](f T) sql.NullFloat64 {
 	nFloat := sql.NullFloat64{}
 
-	if in != nil {
-		nFloat.Float64 = *in
+	switch v := any(f).(type) {
+	case float64:
+		nFloat.Float64 = v
 		nFloat.Valid = true
+	case *float64:
+		if v != nil {
+			nFloat.Float64 = *v
+			nFloat.Valid = true
+		}
 	}
 
 	return nFloat
 }
 
-// ToNullBoolean converts an boolean pointer to a sql.NullBool type.
-func ToNullBoolean(b *bool) sql.NullBool {
+// NullBoolean converts the native go boolean type to a sql.NullBool type.
+func NullBoolean(b *bool) sql.NullBool {
 	nBool := sql.NullBool{}
 
-	if b != nil {
-		nBool.Bool = *b
+	switch v := any(b).(type) {
+	case bool:
+		nBool.Bool = v
 		nBool.Valid = true
+	case *bool:
+		if v != nil {
+			nBool.Bool = *v
+			nBool.Valid = true
+		}
 	}
 
 	return nBool
 }
 
-// ToNullTime converts an time pointer to a sql NullTime type.
-// This function will mark zero time as valid.
-func ToNullTime(t *time.Time) sql.NullTime {
+// NullTime converts an time pointer to a sql NullTime type.
+// This function will treats the Zero time as valid.
+func NullTime[T time.Time | *time.Time](t *time.Time) sql.NullTime {
 	nTime := sql.NullTime{}
 
-	if t != nil {
-		nTime.Time = *t
+	switch v := any(t).(type) {
+	case time.Time:
+		nTime.Time = v
 		nTime.Valid = true
+	case *time.Time:
+		if v != nil {
+			nTime.Time = *v
+			nTime.Valid = true
+		}
 	}
 
 	return nTime
@@ -115,7 +162,7 @@ func ToNullTime(t *time.Time) sql.NullTime {
 // Serial is a notational convenience for creating unique identifier columns.
 // It is an auto-incrementing integer starting from zero.
 // https://www.postgresql.org/docs/current/datatype-numeric.html#DATATYPE-SERIAL
-func ToSerial(in string) (uint64, error) {
+func Serial(in string) (uint64, error) {
 	out, err := strconv.ParseUint(in, 10, 64)
 	if err != nil {
 		err = fmt.Errorf("sqlmap: failed to parse '%s' as unsigned int", in)
