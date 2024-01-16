@@ -51,7 +51,7 @@ func NullInt64[T int64 | *int64](i T) sql.NullInt64 {
 }
 
 // NullInt32 converts the native go int32 type to a sql.NullInt32 type.
-func NullInt32(i *int32) sql.NullInt32 {
+func NullInt32[T int32 | *int32](i T) sql.NullInt32 {
 	nInt := sql.NullInt32{}
 
 	switch v := any(i).(type) {
@@ -123,7 +123,7 @@ func NullFloat64[T float64 | *float64](f T) sql.NullFloat64 {
 }
 
 // NullBoolean converts the native go boolean type to a sql.NullBool type.
-func NullBoolean(b *bool) sql.NullBool {
+func NullBoolean[T bool | *bool](b T) sql.NullBool {
 	nBool := sql.NullBool{}
 
 	switch v := any(b).(type) {
@@ -142,7 +142,7 @@ func NullBoolean(b *bool) sql.NullBool {
 
 // NullTime converts an time pointer to a sql NullTime type.
 // This function will treats the Zero time as valid.
-func NullTime[T time.Time | *time.Time](t *time.Time) sql.NullTime {
+func NullTime[T time.Time | *time.Time](t T) sql.NullTime {
 	nTime := sql.NullTime{}
 
 	switch v := any(t).(type) {
