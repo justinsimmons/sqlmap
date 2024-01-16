@@ -115,7 +115,7 @@ func main() {
     var biz *string
 
 	foo, err := queries.CreateFoo(ctx, datastore.CreateFooParams{
-		Bar: sqlmap.ToNullString(biz),
+		Bar: sqlmap.NullString(biz),
 		Biz: "This is biz",
 	})
 
