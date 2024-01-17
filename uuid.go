@@ -11,13 +11,19 @@ import (
 	"github.com/google/uuid"
 )
 
-// NullUUID converts a UUID pointer to a uuid.NullUUID type.
-func NullUUID(id *uuid.UUID) uuid.NullUUID {
+// NullUUID converts a google UUID to a uuid.NullUUID type.
+func NullUUID[T uuid.UUID | *uuid.UUID](id T) uuid.NullUUID {
 	nUUID := uuid.NullUUID{}
 
-	if id != nil {
-		nUUID.UUID = *id
+	switch v := any(id).(type) {
+	case uuid.UUID:
+		nUUID.UUID = v
 		nUUID.Valid = true
+	case *uuid.UUID:
+		if v != nil {
+			nUUID.UUID = *v
+			nUUID.Valid = true
+		}
 	}
 
 	return nUUID

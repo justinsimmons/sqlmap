@@ -19,3 +19,6 @@
 
 # Go workspace file
 go.work
+
+# Linter config for local development
+.golangci.yml
