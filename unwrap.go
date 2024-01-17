@@ -10,119 +10,86 @@ package sqlmap
 import (
 	"database/sql"
 	"time"
-
-	"github.com/google/uuid"
-
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // UnwrapString unwraps the sql null string to a string pointer.
 func UnwrapString(s sql.NullString) *string {
-	var str *string
-
-	if s.Valid {
-		str = &s.String
+	if !s.Valid {
+		return nil
 	}
 
-	return str
+	return &s.String
 }
 
 // UnwrapTime unwraps the sql null time to a time.Time struct.
 // If the value is null the function will return an empty time.Time struct.
 func UnwrapTime(t sql.NullTime) time.Time {
-	var tm time.Time
-
-	if t.Valid {
-		tm = t.Time
+	if !t.Valid {
+		return time.Time{}
 	}
 
-	return tm
+	return t.Time
 }
 
-// UnwrapTime unwraps the sql null time to a timestamppb.Timestamp pointer.
-func UnwrapTimestamp(t sql.NullTime) *timestamppb.Timestamp {
-	tm := UnwrapTime(t)
-
-	if tm.IsZero() {
+// UnwrapTimePtr unwraps the sql null time to a time.Time pointer.
+func UnwrapTimePtr(t sql.NullTime) *time.Time {
+	if !t.Valid {
 		return nil
 	}
 
-	return timestamppb.New(tm)
+	return &t.Time
 }
 
 // UnwrapInt64 unwraps the sql.NullInt64 to a int64 pointer.
-func UnwrapInt64(in sql.NullInt64) *int64 {
-	var nInt *int64
-
-	if in.Valid {
-		nInt = &in.Int64
+func UnwrapInt64(i sql.NullInt64) *int64 {
+	if !i.Valid {
+		return nil
 	}
 
-	return nInt
+	return &i.Int64
 }
 
 // UnwrapInt32 unwraps the sql.NullInt32 to a int32 pointer.
-func UnwrapInt32(in sql.NullInt32) *int32 {
-	var nInt *int32
-
-	if in.Valid {
-		nInt = &in.Int32
+func UnwrapInt32(i sql.NullInt32) *int32 {
+	if !i.Valid {
+		return nil
 	}
 
-	return nInt
+	return &i.Int32
 }
 
 // UnwrapInt16 unwraps the sql.NullInt16 to a int16 pointer.
-func UnwrapInt16(in sql.NullInt16) *int16 {
-	var nInt *int16
-
-	if in.Valid {
-		nInt = &in.Int16
+func UnwrapInt16(i sql.NullInt16) *int16 {
+	if !i.Valid {
+		return nil
 	}
 
-	return nInt
+	return &i.Int16
 }
 
 // UnwrapByte unwraps the sql.NullByte to a byte pointer.
-func UnwrapByte(in sql.NullByte) *byte {
-	var nByte *byte
-
-	if in.Valid {
-		nByte = &in.Byte
+func UnwrapByte(b sql.NullByte) *byte {
+	if !b.Valid {
+		return nil
 	}
 
-	return nByte
+	return &b.Byte
 }
 
 // UnwrapFloat64 unwraps the sql.NullFloat64 to a float64 pointer.
-func UnwrapFloat64(in sql.NullFloat64) *float64 {
-	var nFloat *float64
-
-	if in.Valid {
-		nFloat = &in.Float64
+func UnwrapFloat64(f sql.NullFloat64) *float64 {
+	if !f.Valid {
+		return nil
 	}
 
-	return nFloat
+	return &f.Float64
 }
 
 // UnwrapBoolean unwraps the sql.NullBool to a boolean pointer.
-func UnwrapBoolean(in sql.NullBool) *bool {
-	var nBool *bool
-
-	if in.Valid {
-		nBool = &in.Bool
+func UnwrapBoolean(b sql.NullBool) *bool {
+	if !b.Valid {
+		return nil
 	}
 
-	return nBool
-}
-
-// UnwrapUUID unwraps the github.com/google/uuid.NullUUID to a uuid.UUID pointer.
-func UnwrapUUID(in uuid.NullUUID) *uuid.UUID {
-	var nID *uuid.UUID
-
-	if in.Valid {
-		nID = &in.UUID
-	}
-
-	return nID
+	return &b.Bool
 }

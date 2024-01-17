@@ -25,3 +25,14 @@ func NullTimeFromTimestamp(t *timestamppb.Timestamp) sql.NullTime {
 
 	return nTime
 }
+
+// UnwrapTime unwraps the sql null time to a timestamppb.Timestamp pointer.
+func UnwrapTimestamp(t sql.NullTime) *timestamppb.Timestamp {
+	tm := UnwrapTime(t)
+
+	if tm.IsZero() {
+		return nil
+	}
+
+	return timestamppb.New(tm)
+}
